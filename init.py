@@ -73,9 +73,6 @@ import encodings
 # ])
 # model.summary()
 
-import Database
-
-
 # db = Database.DBManipulation()
 #
 # #db.insertPeople()
