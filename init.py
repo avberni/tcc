@@ -79,3 +79,5 @@ import encodings
 # db.insertImage()
 #
 # a = 1
+
+print("teste")
