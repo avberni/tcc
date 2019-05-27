@@ -42,7 +42,7 @@ class People(BASE):
     id        = Column(Integer,primary_key=True)
     name      = Column(String,index=True)
     age       = Column(Integer)
-    dateBirth = Column(DateTime,default=datetime.datetime.utcnow())
+    dateBirth = Column(DateTime,default=datetime.utcnow())
 
     def __init__(self, name, age, dateBirth):
         self.name = name

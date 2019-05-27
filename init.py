@@ -78,11 +78,22 @@ import encodings
 # #db.insertPeople()
 # db.insertImage()
 #
-# a = 1
+# a = 1.strftime('%Y/%m/%d')
 
-asdadsasdadas
-da
-ddsa
-dasd
-asd
-asdgit
+# from datetime import date,timedelta,datetime
+#
+# now = date.today()
+#
+# datestart = now + timedelta(days=1)
+#
+# op = str(datestart)
+#
+# op2 = datetime.strptime(op, '%Y-%m-%d')
+#
+# print(op2)
+
+# numeros = [1,2,3,4,5,6,7,8,9]
+#
+# a = filter(lambda a: a > 4,numeros)
+#
+# print(list(a))
