@@ -6,11 +6,16 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-opencv-python = "*"
+
 pydicom = "*"
+sqlalchemy = "*"
+opencv-python = "*"
 pillow = "*"
 numpy = "*"
-sqlalchemy = "*"
+wheel = "*"
+cx-freeze = "*"
+setuptools = "*"
+
 
 [requires]
 python_version = "3.5"

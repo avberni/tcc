@@ -102,7 +102,7 @@ class FindDialogs(object):
 
     def create_widget_find(self):
 
-        now = date.today().strftime('%Y/%m/%d')
+        date_time = date.today().strftime('%Y/%m/%d')
 
         self.dataStartFrame = Frame(self.root)
         self.dataEndFrame   = Frame(self.root)
@@ -117,8 +117,9 @@ class FindDialogs(object):
         self.dirLoadLabel.grid(sticky=W,row=1,column=0,padx=PADX,pady=PADY)
         self.dirSaveLabel.grid(sticky=W,row=2,column=0,padx=PADX,pady=PADY)
 
-        self.dataStartContents = StringVar(value=now)
-        self.dataEndContents = StringVar(value=now)
+        self.dataStartContents = StringVar(value=date_time)
+        self.dataEndContents = StringVar(value=date_time)
+
         self.dirLoadContents = StringVar()
         self.dirSaveContents = StringVar()
 
@@ -219,7 +220,6 @@ class SortDialogs(object):
         self.dirLoadContents = StringVar()
         self.dirSaveContents = StringVar()
 
-
         self.dirLoadLabel = Label(self.root, text="Selecione diretorio DCM:")
         self.dirSaveLabel = Label(self.root, text="Selecione diretorio para salvar JPEG:")
 
@@ -287,7 +287,7 @@ class TrainDialogs(object):
     CurrDir = os.getcwd()
 
     def __init__(self, **kw):
-        self.root = tk.Tk()
+        self.root = Tk()
         self.root.title(self.AppName)
 
         windowWidth = self.root.winfo_reqwidth()
@@ -320,10 +320,10 @@ class TrainDialogs(object):
         self.dirLoadEntry["textvariable"] = self.dirLoadContents
         Train_Ima.dirLoadContents = self.dirLoadContents
 
-        self.okBtn = tk.Button(self.root, text="OK", command=self.ok, width=5)
+        self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=1, column=1, sticky=E, padx=PADX,pady=PADY)
 
-        self.backBtn = tk.Button(self.root, text="Voltar", command=self.voltar, width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.voltar, width=5)
         self.backBtn.grid(row=1, column=2, padx=PADX,pady=PADY)
 
     def ok(self):
