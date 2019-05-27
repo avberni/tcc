@@ -1,4 +1,4 @@
-import tkinter as tk
+#import tkinter as tk
 from tkinter import *
 import tkinter.filedialog as file
 import os
@@ -21,7 +21,7 @@ class MainDialogs(object):
 
     def __init__(self,**kw):
 
-        self.root = tk.Tk()
+        self.root = Tk()
         self.root.title(self.AppName)
         self.root.resizable(width=False, height=False)
 
@@ -35,16 +35,16 @@ class MainDialogs(object):
         # Positions the window in the center of the page.
         self.root.geometry("+{}+{}".format(positionRight, positionDown))
 
-        self.findBtn = tk.Button(self.root, text="Procura", command=self.finddialogs,height=5,width=10,justify=CENTER)
+        self.findBtn = Button(self.root, text="Procura", command=self.finddialogs,height=5,width=10,justify=CENTER)
         self.findBtn.grid(row=0, column=0, padx=PADX, pady=PADY)
 
-        self.sortBtn = tk.Button(self.root, text="Separa", command=self.sortdialogs,height=5,width=10,justify=CENTER)
+        self.sortBtn = Button(self.root, text="Separa", command=self.sortdialogs,height=5,width=10,justify=CENTER)
         self.sortBtn.grid(row=0, column=1, padx=PADX, pady=PADY)
 
-        self.treineBtn = tk.Button(self.root, text="Treina", command=self.traindialogs, height=5,width=10,justify=CENTER)
+        self.treineBtn = Button(self.root, text="Treina", command=self.traindialogs, height=5,width=10,justify=CENTER)
         self.treineBtn.grid(row=0, column=2, padx=PADX, pady=PADY)
 
-        self.testBtn = tk.Button(self.root, text="Testa", command=self.testedialogs, height=5,width=10,justify=CENTER)
+        self.testBtn = Button(self.root, text="Testa", command=self.testedialogs, height=5,width=10,justify=CENTER)
         self.testBtn.grid(row=0, column=3, padx=PADX, pady=PADY)
 
 
@@ -82,7 +82,7 @@ class FindDialogs(object):
 
     def __init__(self, **kw):
 
-        self.root = tk.Tk()
+        self.root = Tk()
         self.root.title(self.AppName)
         self.root.resizable(width=False,height=False)
 
@@ -106,28 +106,28 @@ class FindDialogs(object):
         now = datetime.now()
         date_time = now.strftime("%d/%m/%Y")
 
-        self.dataStartFrame = tk.Frame(self.root)
-        self.dataEndFrame   = tk.Frame(self.root)
+        self.dataStartFrame = Frame(self.root)
+        self.dataEndFrame   = Frame(self.root)
 
-        self.dataStartLabel = tk.Label(self.dataStartFrame,text="Data Inicio:")
-        self.dataEndLabel   = tk.Label(self.dataEndFrame,text="Data Fim:")
-        self.dirLoadLabel   = tk.Label(self.root, text="Selecione diretorio das fotos:")
-        self.dirSaveLabel   = tk.Label(self.root, text="Selecione diretorio para savar as fotos:")
+        self.dataStartLabel = Label(self.dataStartFrame,text="Data Inicio:")
+        self.dataEndLabel   = Label(self.dataEndFrame,text="Data Fim:")
+        self.dirLoadLabel   = Label(self.root, text="Selecione diretorio das fotos:")
+        self.dirSaveLabel   = Label(self.root, text="Selecione diretorio para savar as fotos:")
 
         self.dataStartLabel.grid(sticky=W)
         self.dataEndLabel.grid(sticky=W)
         self.dirLoadLabel.grid(sticky=W,row=1,column=0,padx=PADX,pady=PADY)
         self.dirSaveLabel.grid(sticky=W,row=2,column=0,padx=PADX,pady=PADY)
 
-        self.dataStartContents = tk.StringVar(value=date_time)
-        self.dataEndContents = tk.StringVar(value=date_time)
-        self.dirLoadContents = tk.StringVar()
-        self.dirSaveContents = tk.StringVar()
+        self.dataStartContents = StringVar(value=date_time)
+        self.dataEndContents = StringVar(value=date_time)
+        self.dirLoadContents = StringVar()
+        self.dirSaveContents = StringVar()
 
-        self.dataStartEntry = tk.Entry(self.dataStartFrame,width=23,textvariable=self.dataStartContents)
-        self.dataEndEntry   = tk.Entry(self.dataEndFrame, width=22,textvariable=self.dataEndContents)
-        self.dirLoadEntry = tk.Entry(self.root, width=31,textvariable=self.dirLoadContents)
-        self.dirSaveEntry = tk.Entry(self.root, width=31,textvariable=self.dirSaveContents)
+        self.dataStartEntry = Entry(self.dataStartFrame,width=23,textvariable=self.dataStartContents)
+        self.dataEndEntry   = Entry(self.dataEndFrame, width=22,textvariable=self.dataEndContents)
+        self.dirLoadEntry = Entry(self.root, width=31,textvariable=self.dirLoadContents)
+        self.dirSaveEntry = Entry(self.root, width=31,textvariable=self.dirSaveContents)
 
         self.dataStartEntry.grid(row=0,column=1)
         self.dataEndEntry.grid(row=0, column=1)
@@ -138,8 +138,8 @@ class FindDialogs(object):
         self.dirLoadEntry.grid(row=1, column=1)
         self.dirSaveEntry.grid(row=2, column=1)
 
-        self.dirLoadBtn = tk.Button(self.root, text="Select", command=self.file_directory_load)
-        self.dirSaveBtn = tk.Button(self.root, text="Select", command=self.file_directory_save)
+        self.dirLoadBtn = Button(self.root, text="Select", command=self.file_directory_load)
+        self.dirSaveBtn = Button(self.root, text="Select", command=self.file_directory_save)
 
         self.dirLoadBtn.grid(row=1, column=2,padx=PADX,pady=PADY)
         self.dirSaveBtn.grid(row=2, column=2,padx=PADX,pady=PADY)
@@ -149,10 +149,10 @@ class FindDialogs(object):
         Search_Ima.dirLoadContents   = self.dirLoadContents
         Search_Ima.dirSaveContents   = self.dirSaveContents
 
-        self.okBtn = tk.Button(self.root, text="OK", command=self.ok, width=5)
+        self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=3, column=1,sticky=E,padx=PADX,pady=PADY)
 
-        self.backBtn = tk.Button(self.root, text="Voltar", command=self.voltar,width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.voltar,width=5)
         self.backBtn.grid(row=3, column=2)
 
     def file_directory_load(self):
@@ -199,7 +199,7 @@ class SortDialogs(object):
 
     def __init__(self, **kw):
 
-        self.root = tk.Tk()
+        self.root = Tk()
         self.root.title(self.AppName)
         #self.root.geometry('%dx%d+%d+%d' % (self.FrameWidth, self.FrameHeight, self.root.winfo_screenwidth() / 4, self.root.winfo_screenheight() / 4))
 
@@ -218,38 +218,34 @@ class SortDialogs(object):
 
     def create_dialog_sort(self):
 
-        self.dirLoadLabel = tk.Label(self.root, text="Selecione diretorio DCM:")
-        self.dirSaveLabel = tk.Label(self.root, text="Selecione diretorio para salvar JPEG:")
+        self.dirLoadContents = StringVar()
+        self.dirSaveContents = StringVar()
+
+        self.dirLoadLabel = Label(self.root, text="Selecione diretorio DCM:")
+        self.dirSaveLabel = Label(self.root, text="Selecione diretorio para salvar JPEG:")
 
         self.dirLoadLabel.grid(sticky=W, padx=PADX,pady=PADY)
         self.dirSaveLabel.grid(sticky=W, padx=PADX,pady=PADY)
 
-        self.dirLoadEntry = tk.Entry(self.root, width=30)
-        self.dirSaveEntry = tk.Entry(self.root, width=30)
+        self.dirLoadEntry = Entry(self.root, width=30,textvariable=self.dirLoadContents)
+        self.dirSaveEntry = Entry(self.root, width=30,textvariable=self.dirSaveContents)
 
         self.dirLoadEntry.grid(row=0, column=1, padx=PADX,pady=PADY)
         self.dirSaveEntry.grid(row=1, column=1, padx=PADX,pady=PADY)
 
-        self.dirLoadBtn = tk.Button(self.root, text="Select", command=self.file_directory_load)
-        self.dirSaveBtn = tk.Button(self.root, text="Select", command=self.file_directory_save)
+        self.dirLoadBtn = Button(self.root, text="Select", command=self.file_directory_load)
+        self.dirSaveBtn = Button(self.root, text="Select", command=self.file_directory_save)
 
         self.dirLoadBtn.grid(row=0, column=2, padx=PADX,pady=PADY)
         self.dirSaveBtn.grid(row=1, column=2, padx=PADX,pady=PADY)
 
-        self.dirLoadContents = tk.StringVar()
-        self.dirSaveContents = tk.StringVar()
-
-
-        self.dirLoadEntry["textvariable"] = self.dirLoadContents
         Sort_Ima.dirLoadContents = self.dirLoadContents
-
-        self.dirSaveEntry["textvariable"] = self.dirSaveContents
         Sort_Ima.dirSaveContents = self.dirSaveContents
 
-        self.okBtn = tk.Button(self.root, text="OK", command=self.ok, width=5)
+        self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=2, column=1, sticky=E, padx=PADX,pady=PADY)
 
-        self.backBtn = tk.Button(self.root, text="Voltar", command=self.voltar, width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.voltar, width=5)
         self.backBtn.grid(row=2, column=2, padx=PADX,pady=PADY)
 
         #self.status = tk.Label(self.root, text="Loading", bd=1, relief=SUNKEN, anchor=E)
@@ -292,7 +288,7 @@ class TrainDialogs(object):
     CurrDir = os.getcwd()
 
     def __init__(self, **kw):
-        self.root = tk.Tk()
+        self.root = Tk()
         self.root.title(self.AppName)
 
         windowWidth = self.root.winfo_reqwidth()
@@ -308,27 +304,27 @@ class TrainDialogs(object):
 
     def create_dialog_train(self):
 
-        self.dirLoadLabel = tk.Label(self.root, text="Selecione diretorio com as fotos JPEG:")
+        self.dirLoadLabel = Label(self.root, text="Selecione diretorio com as fotos JPEG:")
 
         self.dirLoadLabel.grid(sticky=W, padx=PADX,pady=PADY)
 
-        self.dirLoadEntry = tk.Entry(self.root, width=30)
+        self.dirLoadEntry = Entry(self.root, width=30)
 
         self.dirLoadEntry.grid(row=0, column=1, padx=PADX,pady=PADY)
 
-        self.dirLoadBtn = tk.Button(self.root, text="Select", command=self.file_directory_load)
+        self.dirLoadBtn = Button(self.root, text="Select", command=self.file_directory_load)
 
         self.dirLoadBtn.grid(row=0, column=2, padx=PADX,pady=PADY)
 
-        self.dirLoadContents = tk.StringVar()
+        self.dirLoadContents = StringVar()
 
         self.dirLoadEntry["textvariable"] = self.dirLoadContents
         Train_Ima.dirLoadContents = self.dirLoadContents
 
-        self.okBtn = tk.Button(self.root, text="OK", command=self.ok, width=5)
+        self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=1, column=1, sticky=E, padx=PADX,pady=PADY)
 
-        self.backBtn = tk.Button(self.root, text="Voltar", command=self.voltar, width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.voltar, width=5)
         self.backBtn.grid(row=1, column=2, padx=PADX,pady=PADY)
 
 
