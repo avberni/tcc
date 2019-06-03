@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-
 pydicom = "*"
 sqlalchemy = "*"
 opencv-python = "*"
@@ -15,7 +14,7 @@ numpy = "*"
 wheel = "*"
 cx-freeze = "*"
 setuptools = "*"
-
+tensorflow = "*"
 
 [requires]
 python_version = "3.5"

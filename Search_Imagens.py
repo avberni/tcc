@@ -64,7 +64,7 @@ class Search(object):
                 patitent[0].namePathImagem.append(os.path.join(dcm_load_path, image))
             else:
                 obj.namePathImagem.append(os.path.join(dcm_load_path, image))
-                ''.append(obj)
+
         except:
             print("ALGUM ERRO")
 
