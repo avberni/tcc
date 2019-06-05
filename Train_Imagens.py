@@ -12,9 +12,10 @@ PNG = False
 
 class Train(object):
 
-    dirLoadContents = ""
-    attributions = ""
-    data_root = ""
+    def __init__(self):
+        self.dirLoadContents = ""
+        self.attributions = ""
+        self.data_root = ""
 
     def main(self):
 

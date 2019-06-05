@@ -6,19 +6,19 @@ import Search_Imagens
 import Sort_Imagens
 import Train_Imagens
 
-
 Search_Ima = Search_Imagens.Search()
 Sort_Ima   = Sort_Imagens.Sort()
 Train_Ima  = Train_Imagens.Train()
+
 PADX = 5
 PADY = 5
+CURRDIR = os.getcwd()
 
 class MainDialogs(object):
 
     AppName = "Main"
-    CurrDir = os.getcwd()
 
-    def __init__(self,**kw):
+    def __init__(self):
 
         self.root = Tk()
         self.root.title(self.AppName)
@@ -75,11 +75,8 @@ class MainDialogs(object):
 class FindDialogs(object):
 
     AppName = "Extrair fotos"
-    FrameWidth = 200
-    FrameHeight = 100
-    CurrDir = os.getcwd()
 
-    def __init__(self, **kw):
+    def __init__(self):
 
         self.root = Tk()
         self.root.title(self.AppName)
@@ -151,13 +148,13 @@ class FindDialogs(object):
         self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=3, column=1,sticky=E,padx=PADX,pady=PADY)
 
-        self.backBtn = Button(self.root, text="Voltar", command=self.voltar,width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.back,width=5)
         self.backBtn.grid(row=3, column=2)
 
     def file_directory_load(self):
 
         try:
-            temp = file.askdirectory(parent=self.root, initialdir=self.CurrDir, title='Path')
+            temp = file.askdirectory(parent=self.root, initialdir=CURRDIR, title='Path')
             self.dirLoadContents.set(temp)
         except AttributeError:
             print("Vazio")
@@ -165,16 +162,8 @@ class FindDialogs(object):
     def file_directory_save(self):
 
         try:
-            temp = file.askdirectory(parent=self.root, initialdir=self.CurrDir, title='Path')
+            temp = file.askdirectory(parent=self.root, initialdir=CURRDIR, title='Path')
             self.dirSaveContents.set(temp)
-        except AttributeError:
-            print("Vazio")
-
-    def file_select(self):
-
-        try:
-            temp = file.askopenfilename(parent=self.root, initialdir=self.CurrDir, title='File',filetypes=[('Todos arquivos', '.*')])
-            self.fileContents.set(temp)
         except AttributeError:
             print("Vazio")
 
@@ -182,7 +171,7 @@ class FindDialogs(object):
         self.root.destroy()
         Search_Ima.work_list()
 
-    def voltar(self):
+    def back(self):
 
         self.root.destroy()
         appProc = MainDialogs()
@@ -192,11 +181,8 @@ class FindDialogs(object):
 class SortDialogs(object):
 
     AppName = "Separa fotos"
-    FrameWidth = 1000
-    FrameHeight = 400
-    CurrDir = os.getcwd()
 
-    def __init__(self, **kw):
+    def __init__(self):
 
         self.root = Tk()
         self.root.title(self.AppName)
@@ -244,7 +230,7 @@ class SortDialogs(object):
         self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=2, column=1, sticky=E, padx=PADX,pady=PADY)
 
-        self.backBtn = Button(self.root, text="Voltar", command=self.voltar, width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.back, width=5)
         self.backBtn.grid(row=2, column=2, padx=PADX,pady=PADY)
 
         #self.status = tk.Label(self.root, text="Loading", bd=1, relief=SUNKEN, anchor=E)
@@ -254,7 +240,7 @@ class SortDialogs(object):
         #self.root.destroy()
         Sort_Ima.work_imagens()
 
-    def voltar(self):
+    def back(self):
         self.root.destroy()
         appProc = MainDialogs()
         appProc.execute()
@@ -265,7 +251,7 @@ class SortDialogs(object):
     def file_directory_load(self):
 
         try:
-            temp = file.askdirectory(parent=self.root, initialdir=self.CurrDir, title='Path')
+            temp = file.askdirectory(parent=self.root, initialdir= CURRDIR, title='Path')
             self.dirLoadContents.set(temp)
         except AttributeError:
             print("Vazio")
@@ -273,7 +259,7 @@ class SortDialogs(object):
     def file_directory_save(self):
 
         try:
-            temp = file.askdirectory(parent=self.root, initialdir=self.CurrDir, title='Path')
+            temp = file.askdirectory(parent=self.root, initialdir= CURRDIR, title='Path')
             self.dirSaveContents.set(temp)
         except AttributeError:
             print("Vazio")
@@ -282,11 +268,8 @@ class SortDialogs(object):
 class TrainDialogs(object):
 
     AppName = "Treinar"
-    FrameWidth = 1000
-    FrameHeight = 400
-    CurrDir = os.getcwd()
 
-    def __init__(self, **kw):
+    def __init__(self):
         self.root = Tk()
         self.root.title(self.AppName)
 
@@ -323,14 +306,14 @@ class TrainDialogs(object):
         self.okBtn = Button(self.root, text="OK", command=self.ok, width=5)
         self.okBtn.grid(row=1, column=1, sticky=E, padx=PADX,pady=PADY)
 
-        self.backBtn = Button(self.root, text="Voltar", command=self.voltar, width=5)
+        self.backBtn = Button(self.root, text="Voltar", command=self.back, width=5)
         self.backBtn.grid(row=1, column=2, padx=PADX,pady=PADY)
 
     def ok(self):
         #self.root.destroy()
         Train_Ima.main()
 
-    def voltar(self):
+    def back(self):
         self.root.destroy()
         appProc = MainDialogs()
         appProc.execute()
@@ -341,7 +324,7 @@ class TrainDialogs(object):
     def file_directory_load(self):
 
         try:
-            temp = file.askdirectory(parent=self.root, initialdir=self.CurrDir, title='Path')
+            temp = file.askdirectory(parent=self.root, initialdir= CURRDIR, title='Path')
             self.dirLoadContents.set(temp)
         except AttributeError:
             print("Vazio")

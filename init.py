@@ -1,14 +1,14 @@
-# import Windows
-#
-# def main(args):
-#     appProc = Windows.MainDialogs()
-#     appProc.execute()
-#     return 0
-#
-# if __name__ == '__main__':
-#     import sys
-#
-#     sys.exit(main(sys.argv))
+import Windows
+
+def main(args):
+    appProc = Windows.MainDialogs()
+    appProc.execute()
+    return 0
+
+if __name__ == '__main__':
+    import sys
+
+    sys.exit(main(sys.argv))
 
 import encodings
 
@@ -98,49 +98,62 @@ import encodings
 #
 # print(list(a))
 
-import tensorflow as tf
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# import tensorflow as tf
+# import os
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# #
+# #
+# # sess = tf.Session()
+# #
+# #
+# #
+# # sess.close()
+#
+# import numpy as np
+# import pathlib
+# import random
 #
 #
-# sess = tf.Session()
+# data_root = os.path.abspath("C:/Users/andre/Desktop/tcc_dados/JPEG")
+# # print(data_root)
+# data_root = pathlib.Path(data_root)
+# # print(data_root)
+# #
+# # for item in data_root.iterdir():
+# #   print(item)
+# #
+# # all_image_paths = list(data_root.glob('*/*'))
+# # all_image_paths = [str(path) for path in all_image_paths]
+# # random.shuffle(all_image_paths)
+# #
+# # image_count = len(all_image_paths)
+# # print(image_count)
+# #
+# #
+# # label_names = sorted(item.name for item in data_root.glob('*/') if item.is_dir())
+# # print(label_names)
+# #
+# # label_to_index = dict((name, index) for index,name in enumerate(label_names))
+# # print(label_to_index)
+# #
+# # all_image_labels = [label_to_index[pathlib.Path(path).parent.name] for path in all_image_paths]
+# #
+# # print("First 24 labels indices: ", all_image_labels[:24])
 #
-#
-#
-# sess.close()
+# # image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255)
+# # image_data = image_generator.flow_from_directory(str(data_root))
+# # print(image_data)
 
-import numpy as np
-import pathlib
-import random
-
-
-data_root = os.path.abspath("C:/Users/andre/Desktop/tcc_dados/JPEG")
-# print(data_root)
-data_root = pathlib.Path(data_root)
-# print(data_root)
+# import numpy as np
+# import cv2
 #
-# for item in data_root.iterdir():
-#   print(item)
+# img1 = cv2.imread("C:/Users/andre/Desktop/tcc_dados/JPEG/jpeg0/teste1.jpg",cv2.IMREAD_UNCHANGED)
+# img2 = cv2.imread("C:/Users/andre/Desktop/tcc_dados/JPEG/jpeg0/teste2.png",cv2.IMREAD_UNCHANGED)
 #
-# all_image_paths = list(data_root.glob('*/*'))
-# all_image_paths = [str(path) for path in all_image_paths]
-# random.shuffle(all_image_paths)
+# ima = img1 - img2
 #
-# image_count = len(all_image_paths)
-# print(image_count)
-#
-#
-# label_names = sorted(item.name for item in data_root.glob('*/') if item.is_dir())
-# print(label_names)
-#
-# label_to_index = dict((name, index) for index,name in enumerate(label_names))
-# print(label_to_index)
-#
-# all_image_labels = [label_to_index[pathlib.Path(path).parent.name] for path in all_image_paths]
-#
-# print("First 24 labels indices: ", all_image_labels[:24])
-
-# image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255)
-# image_data = image_generator.flow_from_directory(str(data_root))
-# print(image_data)
+# cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+# cv2.imshow('image',ima)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 

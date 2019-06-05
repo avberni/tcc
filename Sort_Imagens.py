@@ -3,12 +3,15 @@ import os
 import cv2
 
 # # make it True if you want in PNG format
-PNG = False
+PNG = True
+
 
 class Sort(object):
 
-    dirLoadContents = ""
-    dirSaveContents = ""
+    def __init__(self):
+        self.dirLoadContents = ""
+        self.dirSaveContents = ""
+        self.format = 'png'
 
     def work_imagens(self):
 
@@ -20,15 +23,11 @@ class Sort(object):
 
                 ds = pydicom.read_file(os.path.join(self.dirLoadContents.get(), image))
 
-                #print(ds)
+                # print(ds)
 
-                if PNG == False:
-                    image = image.replace('.dcm', '.jpg')
-                else:
-                    image = image.replace('.dcm', '.png')
+                image = image.replace('.dcm', '.' + self.format)
 
-                path = ""
-                eyesectionvalue = 0   # EYSECTION = 1 (Fundo de olho)
+                eyesectionvalue = 0  # EYSECTION = 1 (Fundo de olho)
 
                 try:
                     for eyesection in ds[0x0040, 0x0555]:
@@ -36,20 +35,20 @@ class Sort(object):
                             eyesectionvalue = eyesection[0x0040, 0xa30a].value
                             break
                 except KeyError:
-                   eyesectionvalue = 2
+                    eyesectionvalue = 2
 
                 if eyesectionvalue == 0:
-                    path = self.dirSaveContents.get() + "/jpeg0"
+                    path = self.dirSaveContents.get() + '/' + self.format + '0'
                 elif eyesectionvalue == 1:
-                    path = self.dirSaveContents.get() + "/jpeg1"
+                    path = self.dirSaveContents.get() + '/' + self.format + '1'
                 else:
-                    path = self.dirSaveContents.get() + "/jpeg2"
-                    #print(ds.filename)
+                    path = self.dirSaveContents.get() + '/' + self.format + '2'
+                    # print(ds.filename)
 
-                if not(os.path.isdir(path)):
-                   os.makedirs(path)
+                if not (os.path.isdir(path)):
+                    os.makedirs(path)
 
-                cv2.imwrite(os.path.join(path, image), cv2.cvtColor(ds.pixel_array,cv2.COLOR_RGB2BGR))
+                cv2.imwrite(os.path.join(path, image), cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
 
         except pydicom.errors.InvalidDicomError:
-                print("erro de dicom")
+            print("erro de dicom")
