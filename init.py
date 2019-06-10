@@ -1,14 +1,14 @@
-import Windows
-
-def main(args):
-    appProc = Windows.MainDialogs()
-    appProc.execute()
-    return 0
-
-if __name__ == '__main__':
-    import sys
-
-    sys.exit(main(sys.argv))
+# import Windows
+#
+# def main(args):
+#     appProc = Windows.MainDialogs()
+#     appProc.execute()
+#     return 0
+#
+# if __name__ == '__main__':
+#     import sys
+#
+#     sys.exit(main(sys.argv))
 
 import encodings
 
@@ -156,4 +156,24 @@ import encodings
 # cv2.imshow('image',ima)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+
+import Data
+from datetime import datetime,date
+
+db = Data.DBManipulation()
+
+# print(Data.EXTERNA)
+#
+# pat = Data.Patient("Andrews",32,date(2009, 10, 25))
+#
+# db.insert(pat)
+#
+# ima = Data.Image("teste",Data.EXTERNA,30,"D")
+
+db.upgrade()
+
+
+
+
+
 

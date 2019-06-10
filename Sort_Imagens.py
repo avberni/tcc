@@ -2,9 +2,6 @@ import pydicom
 import os
 import cv2
 
-# # make it True if you want in PNG format
-PNG = True
-
 
 class Sort(object):
 
@@ -37,13 +34,7 @@ class Sort(object):
                 except KeyError:
                     eyesectionvalue = 2
 
-                if eyesectionvalue == 0:
-                    path = self.dirSaveContents.get() + '/' + self.format + '0'
-                elif eyesectionvalue == 1:
-                    path = self.dirSaveContents.get() + '/' + self.format + '1'
-                else:
-                    path = self.dirSaveContents.get() + '/' + self.format + '2'
-                    # print(ds.filename)
+                path = self.dirSaveContents.get() + '/' + self.format + eyesectionvalue
 
                 if not (os.path.isdir(path)):
                     os.makedirs(path)

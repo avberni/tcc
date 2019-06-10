@@ -20,6 +20,7 @@ class Search(object):
         self.dataStartContents = ""
         self.dataEndContents = ""
         self.listPatImg = []
+        self.db = Data.DBManipulation()
 
     def work_list(self):
 
@@ -61,7 +62,7 @@ class Search(object):
     def insertPatImag(self, namepatient, pathfile):
 
         try:
-            patitent = list(filter(lambda a : a.name == namepatient, self.listPatImg))
+            patitent = list(filter(lambda patient : patient.name == namepatient, self.listPatImg))
 
             if (len(patitent) != 0) :
                 patitent[0].namePathFile.append(pathfile)
@@ -69,10 +70,13 @@ class Search(object):
                 obj = ParPatientImage(namepatient)
                 obj.namePathFile.append(pathfile)
 
+            self.insertDB()
+
         except :
             print("ALGUM ERRO")
 
     def insertDB(self) :
+        self.db.insertPatient()
         print("INSER IMAGEM E PACINTE")
 
     def saveImage(self) :
