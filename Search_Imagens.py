@@ -24,17 +24,17 @@ class Search(object):
 
     def work_list(self):
 
-        datestart = self.dataStartContents
-        dateend = self.dataStartContents
+        datestart = datetime.strptime(self.dataStartContents.get(), '%Y/%m/%d').date()
+        dateend = datetime.strptime(self.dataEndContents.get(), '%Y/%m/%d').date()
 
         while (dateend >= datestart) :
 
             try :
-                # procura na pasta especifica data
+                # procura na pasta especifica com  a data
                 dcm_load_path = self.dirLoadContents.get()
-                dcm_load_path += "/" + datetime.strptime(datestart, '%Y/%m/%d').strftime('%Y/%m/%d')
+                dcm_load_path += "/" + datestart.strftime('%Y/%m/%d')
 
-                # procura as fotos especificas
+                #lista todas as fotos
                 images_path = os.listdir(dcm_load_path)
 
                 for n, image in enumerate(images_path):
@@ -43,21 +43,52 @@ class Search(object):
                         pathfile = os.path.join(dcm_load_path, image)
                         ds = pydicom.read_file(pathfile)
 
-                        pat_name = ds.PatientName
-                        display_name = str(pat_name.given_name + " " + pat_name.family_name).lower()
+                        print(image)
+                        print(ds)
 
-                        self.insertPatImag(display_name, pathfile)
+                        self.insertPatient(pathfile,ds)
+                        self.insertImage(image,ds)
 
                     except pydicom.errors.InvalidDicomError:
                         print("InvalidDicomError")
                     except AttributeError :
                         print("AttributeError")
 
-                # Gravar Imagens
+
                 datestart = datestart + timedelta(days=1)
 
             except FileNotFoundError :
                 print("FileNotFoundError")
+                datestart = dateend + timedelta(days=1)
+
+    def saveImage(self) :
+
+        dcm_save_path = self.dirSaveContents.get() + "/save"
+
+        if os.path.isdir(dcm_save_path):
+            print("pasta DCM ja existe")
+        else:
+            os.makedirs(dcm_save_path)
+
+        for n, obj in enumerate(self.listPatImg):
+            for image in obj.listImage :
+                ds = pydicom.read_file(image)
+                shutil.copy2(ds.filename, dcm_save_path)
+
+    def insertPatient(self,pathfile,dicom):
+
+        patname = dicom.PatientName
+        displayname = str(patname.given_name + " " + patname.family_name).lower()
+
+        listDate = list(dicom.PatientBirthDate)
+        patbirthdate = listDate[6] + listDate[7] + "/" + listDate[4] + listDate[5] + "/" + listDate[0] + listDate[1] + listDate[2] + listDate[3]
+        patbirthdate = datetime.strptime(patbirthdate, '%d/%m/%Y').date()
+
+        self.insertPatImag(displayname, pathfile)
+
+        if len(self.db.patientSearch(displayname)) == 0:
+            patient = Data.Patient(displayname, patbirthdate)
+            self.db.insert(patient)
 
     def insertPatImag(self, namepatient, pathfile):
 
@@ -69,26 +100,26 @@ class Search(object):
             else:
                 obj = ParPatientImage(namepatient)
                 obj.namePathFile.append(pathfile)
-
-            self.insertDB()
-
+                self.listPatImg.append(obj)
         except :
             print("ALGUM ERRO")
 
-    def insertDB(self) :
-        self.db.insertPatient()
-        print("INSER IMAGEM E PACINTE")
+    def insertImage(self,file,dicom):
 
-    def saveImage(self) :
+        eyesectionvalue = 0  # EYSECTION = 1 (Fundo de olho)
 
-        dcm_save_path = self.dirSaveContents.get() + "/save"
+        try :
+            for eyesection in dicom[0x0040, 0x0555] :
+                if eyesection[0x0040, 0xa043][0][0x0008, 0x0100].value == "Eye section" :
+                    eyesectionvalue = eyesection[0x0040, 0xa30a].value
+                    break
+        except KeyError :
+            eyesectionvalue = 2
 
-        if os.path.isdir(dcm_save_path) :
-            print("pasta DCM ja existe")
-        else :
-            os.makedirs(dcm_save_path)
+        listDate = list(dicom.StudyDate)
+        dateStudy = listDate[6] + listDate[7] + "/" + listDate[4] + listDate[5] + "/" + listDate[0] + listDate[1] + listDate[2] + listDate[3]
+        dateStudy = datetime.strptime(dateStudy, '%d/%m/%Y').date()
 
-        for n, obj in enumerate(self.listPatImg):
-            for image in obj.listImage :
-                ds = pydicom.read_file(image)
-                shutil.copy2(ds.filename, dcm_save_path)
+        if len(self.db.imageSearch(file)) == 0:
+            img = Data.Image(file, eyesectionvalue, dicom.HorizontalFieldOfView, dicom.ImageLaterality, dateStudy)
+            self.db.insert(img)

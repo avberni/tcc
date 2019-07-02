@@ -34,7 +34,7 @@ class Sort(object):
                 except KeyError:
                     eyesectionvalue = 2
 
-                path = self.dirSaveContents.get() + '/' + self.format + eyesectionvalue
+                path = self.dirSaveContents.get() + '/' + self.format + str(eyesectionvalue)
 
                 if not (os.path.isdir(path)):
                     os.makedirs(path)

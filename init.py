@@ -1,14 +1,14 @@
-# import Windows
-#
-# def main(args):
-#     appProc = Windows.MainDialogs()
-#     appProc.execute()
-#     return 0
-#
-# if __name__ == '__main__':
-#     import sys
-#
-#     sys.exit(main(sys.argv))
+import Windows
+
+def main(args):
+    appProc = Windows.MainDialogs()
+    appProc.execute()
+    return 0
+
+if __name__ == '__main__':
+    import sys
+
+    sys.exit(main(sys.argv))
 
 import encodings
 
@@ -73,31 +73,6 @@ import encodings
 # ])
 # model.summary()
 
-# db = Database.DBManipulation()
-#
-# #db.insertPeople()
-# db.insertImage()
-#
-# a = 1.strftime('%Y/%m/%d')
-
-# from datetime import date,timedelta,datetime
-#
-# now = date.today()
-#
-# datestart = now + timedelta(days=1)
-#
-# op = str(datestart)
-#
-# op2 = datetime.strptime(op, '%Y-%m-%d')
-#
-# print(op2)
-
-# numeros = [1,2,3,4,5,6,7,8,9]
-#
-# a = filter(lambda a: a > 4,numeros)
-#
-# print(list(a))
-
 # import tensorflow as tf
 # import os
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -157,23 +132,117 @@ import encodings
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 
-import Data
+#import Data
 from datetime import datetime,date
 
-db = Data.DBManipulation()
+#db = Data.DBManipulation()
 
 # print(Data.EXTERNA)
 #
-# pat = Data.Patient("Andrews",32,date(2009, 10, 25))
+#pat = Data.Patient("Andrews",32,date(2009, 10, 25))
 #
 # db.insert(pat)
 #
 # ima = Data.Image("teste",Data.EXTERNA,30,"D")
 
-db.upgrade()
+
+# import os
+# import pydicom
+# import shutil
+#
+# dcm_load_path = "C:/Users/andre/Desktop/tcc_dados/ds"
+#
+# images_path = os.listdir(dcm_load_path)
+#
+# for n, image in enumerate(images_path) :
+#
+#
+#     pathfile = os.path.join(dcm_load_path, image)
+#     ds = pydicom.read_file(pathfile)
+#
+#     bir = ds.PatientBirthDate
+#     path_date = ds.PatientName
+#
+#     la = ds.ImageLaterality
+#     ll = ds.HorizontalFieldOfView
+#     ls = ds.StudyDate
+#
+#     try :
+#         for eyesection in ds[0x0040, 0x0555] :
+#             if eyesection[0x0040, 0xa043][0][0x0008, 0x0100].value == "Eye section":
+#                 eyesectionvalue = eyesection[0x0040, 0xa30a].value
+#                 break
+#     except KeyError :
+#         eyesectionvalue = 2
+#
+#
+#     print(pathfile)
+#     print(bir)
+#     print("\n\n")
+#     print(pathfile)
+#     print(eyesectionvalue)
+#     print(ll)
+#     print(la)
+#     print(ls)
+#
+#     print("----------------------------------------------")
+#
+#     dcm_load_path = "C:/Users/andre/Desktop/tcc_dados/a"
+#
+#     shutil.copy2(pathfile, dcm_load_path)
+#     #print(ds)
+#     print("ERRO")
+
+# import os
+# import pydicom
+# import cv2
+#
+#
+# dcm_load_path = "C:/Users/andre/Desktop/tcc_dados/ds"
+#
+# images_path = os.listdir(dcm_load_path)
+#
+# for n, image in enumerate(images_path):
+#
+#     pathfile = os.path.join(dcm_load_path, image)
+#     ds = pydicom.read_file(pathfile)
+#
+#     image2 = image.replace('.dcm', '.' + 'png')
+#     image3 = image.replace('.dcm', '.' + 'jpg')
+#
+#     dcm_load_path = "C:/Users/andre/Desktop/tcc_dados/a"
+#
+#     path2 = os.path.join(dcm_load_path, image2)
+#     cv2.imwrite(path2, cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
+#
+#     path3 = os.path.join(dcm_load_path, image3)
+#     cv2.imwrite(path3, cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
+#
+#
+#     i = cv2.imread(path2,cv2.IMREAD_UNCHANGED)
+#     ii = cv2.imread(path3, cv2.IMREAD_UNCHANGED)
+#
+#
+#     a = ds.pixel_array - i
+#     aa = ds.pixel_array - ii
+#     aaa = i - ii
+#
+#
+#
+#     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+#     cv2.imshow('image', a)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
+#
+#     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+#     cv2.imshow('image', aa)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
+#
+#     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+#     cv2.imshow('image', aaa)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
 
 
-
-
-
-
+from datetime import timedelta, date
