@@ -86,9 +86,9 @@ class DBManipulation(object):
         self.session.commit()
         self.session.close_all()
 
-    def patientSearch(self, patName):
+    def patientSearch(self, patName,patbirthdate):
         DBManipulation.session(self)
-        ret = self.session.query(Patient).filter(Patient.name == patName).all()
+        ret = self.session.query(Patient).filter(Patient.name == patName, Patient.birthDate == patbirthdate).all()
         self.session.close_all()
         return ret
 

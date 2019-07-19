@@ -1,6 +1,5 @@
 import os
 import pydicom
-import Data
 import shutil
 from datetime import timedelta, datetime
 
@@ -20,7 +19,6 @@ class Search(object):
         self.dataStartContents = ""
         self.dataEndContents = ""
         self.listPatImg = []
-        self.db = Data.DBManipulation()
 
     def work_list(self):
 
@@ -42,18 +40,28 @@ class Search(object):
                     try:
                         pathfile = os.path.join(dcm_load_path, image)
                         ds = pydicom.read_file(pathfile)
+                        patname = ds.PatientName
+                        displayname = str(patname.given_name + " " + patname.family_name).lower()
 
-                        print(image)
-                        print(ds)
+                        eyesectionvalue = 0
 
-                        self.insertPatient(pathfile,ds)
-                        self.insertImage(image,ds)
+                        try:
+                            for eyesection in ds[0x0040, 0x0555] :
+                                if eyesection[0x0040, 0xa043][0][0x0008, 0x0100].value == "Eye section" :
+                                    eyesectionvalue = eyesection[0x0040, 0xa30a].value
+                                    break
+                        except KeyError :
+                            eyesectionvalue = 2
+
+                        if eyesectionvalue == 0:
+                            self.listPatImg.append(displayname)
 
                     except pydicom.errors.InvalidDicomError:
                         print("InvalidDicomError")
                     except AttributeError :
                         print("AttributeError")
 
+                self.searchAgain(dcm_load_path)
 
                 datestart = datestart + timedelta(days=1)
 
@@ -61,65 +69,31 @@ class Search(object):
                 print("FileNotFoundError")
                 datestart = dateend + timedelta(days=1)
 
-    def saveImage(self) :
+    def searchAgain(self,dcmpath):
 
-        dcm_save_path = self.dirSaveContents.get() + "/save"
+        images_path = os.listdir(dcmpath)
 
-        if os.path.isdir(dcm_save_path):
-            print("pasta DCM ja existe")
-        else:
-            os.makedirs(dcm_save_path)
+        for n, image in enumerate(images_path):
 
-        for n, obj in enumerate(self.listPatImg):
-            for image in obj.listImage :
-                ds = pydicom.read_file(image)
+            try:
+                pathfile = os.path.join(dcmpath, image)
+                ds = pydicom.read_file(pathfile)
+                patname = ds.PatientName
+                displayname = str(patname.given_name + " " + patname.family_name).lower()
+
+                if self.listPatImg.__contains__(displayname):
+                    print("Achou")
+
+                dcm_save_path = self.dirSaveContents.get() + "/save"
+
+                if os.path.isdir(dcm_save_path):
+                    print("pasta DCM ja existe")
+                else:
+                    os.makedirs(dcm_save_path)
+
                 shutil.copy2(ds.filename, dcm_save_path)
 
-    def insertPatient(self,pathfile,dicom):
-
-        patname = dicom.PatientName
-        displayname = str(patname.given_name + " " + patname.family_name).lower()
-
-        listDate = list(dicom.PatientBirthDate)
-        patbirthdate = listDate[6] + listDate[7] + "/" + listDate[4] + listDate[5] + "/" + listDate[0] + listDate[1] + listDate[2] + listDate[3]
-        patbirthdate = datetime.strptime(patbirthdate, '%d/%m/%Y').date()
-
-        self.insertPatImag(displayname, pathfile)
-
-        if len(self.db.patientSearch(displayname)) == 0:
-            patient = Data.Patient(displayname, patbirthdate)
-            self.db.insert(patient)
-
-    def insertPatImag(self, namepatient, pathfile):
-
-        try:
-            patitent = list(filter(lambda patient : patient.name == namepatient, self.listPatImg))
-
-            if (len(patitent) != 0) :
-                patitent[0].namePathFile.append(pathfile)
-            else:
-                obj = ParPatientImage(namepatient)
-                obj.namePathFile.append(pathfile)
-                self.listPatImg.append(obj)
-        except :
-            print("ALGUM ERRO")
-
-    def insertImage(self,file,dicom):
-
-        eyesectionvalue = 0  # EYSECTION = 1 (Fundo de olho)
-
-        try :
-            for eyesection in dicom[0x0040, 0x0555] :
-                if eyesection[0x0040, 0xa043][0][0x0008, 0x0100].value == "Eye section" :
-                    eyesectionvalue = eyesection[0x0040, 0xa30a].value
-                    break
-        except KeyError :
-            eyesectionvalue = 2
-
-        listDate = list(dicom.StudyDate)
-        dateStudy = listDate[6] + listDate[7] + "/" + listDate[4] + listDate[5] + "/" + listDate[0] + listDate[1] + listDate[2] + listDate[3]
-        dateStudy = datetime.strptime(dateStudy, '%d/%m/%Y').date()
-
-        if len(self.db.imageSearch(file)) == 0:
-            img = Data.Image(file, eyesectionvalue, dicom.HorizontalFieldOfView, dicom.ImageLaterality, dateStudy)
-            self.db.insert(img)
+            except pydicom.errors.InvalidDicomError:
+                print("InvalidDicomError")
+            except AttributeError:
+                print("AttributeError")
