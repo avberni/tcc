@@ -1,8 +1,6 @@
-from enum import Enum
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, func,Date,Table
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date, Boolean
 from sqlalchemy.orm import sessionmaker, relationship
-from datetime import datetime
 
 NAMEDATABASE = 'sqlite:///catarata.db'
 BASE = declarative_base()
@@ -20,7 +18,7 @@ class Exam(BASE):
     patient = relationship("Patient", backref="Exam")
     image_id = Column(Integer, ForeignKey('Imagem.id'))
     image = relationship("Image", backref="Exam")
-    cataract = Column(String)
+    cataract = Column(Boolean)
 
     def __init__(self,patient,image,cataract):
         self.patient = patient
@@ -50,7 +48,7 @@ class Image(BASE):
         return self.fileName + "," + self.type + "," + self.angle
 
     def __getFileName__(self):
-        return self.name
+        return self.fileName
 
 class Patient(BASE):
 
@@ -66,6 +64,9 @@ class Patient(BASE):
 
     def __srt__(self):
         return self.name + "," + self.birthDate
+
+    def __getName__(self):
+        return self.name
 
 class DBManipulation(object):
 
@@ -95,5 +96,12 @@ class DBManipulation(object):
     def imageSearch(self, fileName):
         DBManipulation.session(self)
         ret = self.session.query(Image).filter(Image.fileName == fileName).all()
+        self.session.close_all()
+        return ret
+
+    def examSearch(self,patient,image):
+        DBManipulation.session(self)
+        #ret = self.session.query(Exam).filter(Exam.patient.name == patient.name,Exam.image.fileName == image.fileName).all()
+        ret = self.session.query(Exam.patient_id,Exam.image_id).filter(Patient.name == patient.name, Image.fileName == image.fileName ).all()
         self.session.close_all()
         return ret

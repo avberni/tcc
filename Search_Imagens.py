@@ -84,14 +84,14 @@ class Search(object):
                 if self.listPatImg.__contains__(displayname):
                     print("Achou")
 
-                dcm_save_path = self.dirSaveContents.get() + "/save"
+                    dcm_save_path = self.dirSaveContents.get() + "/save"
 
-                if os.path.isdir(dcm_save_path):
-                    print("pasta DCM ja existe")
-                else:
-                    os.makedirs(dcm_save_path)
+                    if os.path.isdir(dcm_save_path):
+                        print("pasta DCM ja existe")
+                    else:
+                        os.makedirs(dcm_save_path)
 
-                shutil.copy2(ds.filename, dcm_save_path)
+                    shutil.copy2(ds.filename, dcm_save_path)
 
             except pydicom.errors.InvalidDicomError:
                 print("InvalidDicomError")

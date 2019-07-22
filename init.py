@@ -1,14 +1,14 @@
-import Windows
-
-def main(args):
-    appProc = Windows.MainDialogs()
-    appProc.execute()
-    return 0
-
-if __name__ == '__main__':
-    import sys
-
-    sys.exit(main(sys.argv))
+# import Windows
+#
+# def main(args):
+#     appProc = Windows.MainDialogs()
+#     appProc.execute()
+#     return 0
+#
+# if __name__ == '__main__':
+#     import sys
+#
+#     sys.exit(main(sys.argv))
 
 import encodings
 
@@ -244,3 +244,74 @@ from datetime import datetime,date
 #     cv2.imshow('image', aaa)
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
+
+# lista = [10,10,20,10]
+#
+# for i, item in enumerate(lista):
+#     if item == 10:
+#         print(i)
+#
+# import xlrd
+# book = xlrd.open_workbook("C:/Users/andre/Desktop/tcc_dados/laudos.xlsx")
+# sh = book.sheet_by_index(0)
+#
+# listNameXML = []
+#
+# for i in range(1, sh.nrows) :
+#     nameXML = sh.cell_value(rowx=i, colx=2).split()
+#     listNameXML.append(str(nameXML).lower())
+#     print(listNameXML[-1])
+
+import pydicom
+
+images_path = "C:/Users/andre/Desktop/tcc_dados/26/1.2.276.0.75.2.1.20.0.3.180731122248561.1174051.27557.dcm"
+
+ds = pydicom.read_file(images_path)
+print(ds)
+#
+# # try:
+# #     print(ds.Laterality)
+# # except Exception as e:
+# #     print(e)
+#
+# try :
+#     for anglesection in ds[0x0040, 0x0555] :
+#         if anglesection[0x0040, 0xa043][0][0x0008, 0x0100].value == "Angle" :
+#             anglevalue = anglesection[0x0040, 0xa30a].value
+#             break
+# except KeyError :
+#     print("ERROR")
+#     anglevalue = 30
+#
+# print(anglevalue)
+
+
+# arquivo = open('nome.txt', 'r') # Abra o arquivo (leitura)
+# conteudo = arquivo.readlines()
+# conteudo.append('Nova linha' + '\n')   # insira seu conteúdo
+#
+# arquivo = open('nome.txt', 'w') # Abre novamente o arquivo (escrita)
+# arquivo.writelines(conteudo)    # escreva o conteúdo criado anteriormente nele.
+#
+# arquivo.close()
+
+# lista = []
+#
+# arquivo = open('nome.txt', 'r')
+#
+# for line in arquivo:
+#     if not lista.__contains__(line):
+#         lista.append(line)
+#
+# arquivo.close()
+#
+# print(len(lista))
+# for nome in lista:
+#     arquivo = open('nome2.txt', 'r')
+#     conteudo = arquivo.readlines()
+#     conteudo.append(nome)
+#
+#     arquivo = open('nome2.txt', 'w')
+#     arquivo.writelines(conteudo)
+#     arquivo.close()
+

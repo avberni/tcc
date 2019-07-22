@@ -207,7 +207,7 @@ class SortDialogs(object):
         self.dirSaveContents = StringVar()
 
         self.dirLoadLabel = Label(self.root, text="Selecione diretorio DCM:")
-        self.dirSaveLabel = Label(self.root, text="Selecione diretorio para salvar JPEG:")
+        self.dirSaveLabel = Label(self.root, text="Selecione diretorio para salvar PNG:")
 
         self.dirLoadLabel.grid(sticky=W, padx=PADX,pady=PADY)
         self.dirSaveLabel.grid(sticky=W, padx=PADX,pady=PADY)
