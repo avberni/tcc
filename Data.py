@@ -18,13 +18,31 @@ class Exam(BASE):
     patient = relationship("Patient", backref="Exam")
     image_id = Column(Integer, ForeignKey('Imagem.id'))
     image = relationship("Image", backref="Exam")
+    cristalino_od = Column(Boolean)
+    outros_od = Column(String)
+    alteracoes_estruturas_com_alteracao_od = Column(String)
+    cristalino_oe = Column(Boolean)
+    outros_oe = Column(String)
+    alteracoes_estruturas_com_alteracao_oe = Column(String)
     cataract = Column(Boolean)
+    hipotese_catarata_descricao  = Column(String)
+    conduta_detalhamento_conduta = Column(String)
+    review = Column(Boolean)
 
-    def __init__(self,patient,image,cataract):
+
+    def __init__(self,patient,image,var,review):
         self.patient = patient
         self.image = image
-        self.cataract = cataract
-
+        self.cristalino_od = var[0]
+        self.outros_od = var[1]
+        self.alteracoes_estruturas_com_alteracao_od = var[2]
+        self.cristalino_oe = var[3]
+        self.outros_oe = var[4]
+        self.alteracoes_estruturas_com_alteracao_oe = var[5]
+        self.cataract = var[6]
+        self.hipotese_catarata_descricao = var[7]
+        self.conduta_detalhamento_conduta = var[8]
+        self.review = review
 
 class Image(BASE):
 
@@ -102,6 +120,6 @@ class DBManipulation(object):
     def examSearch(self,patient,image):
         DBManipulation.session(self)
         #ret = self.session.query(Exam).filter(Exam.patient.name == patient.name,Exam.image.fileName == image.fileName).all()
-        ret = self.session.query(Exam.patient_id,Exam.image_id).filter(Patient.name == patient.name, Image.fileName == image.fileName ).all()
+        ret = self.session.query(Exam.patient_id,Exam.image_id).filter(Patient.name == patient.name, Image.fileName == image.fileName).all()
         self.session.close_all()
         return ret

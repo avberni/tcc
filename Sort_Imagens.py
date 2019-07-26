@@ -117,9 +117,9 @@ class Sort(object):
         #union = self.db.examSearch(patient,image)
 
         #if len(union) == 0 :
-        value = self.isCatarata()
+        values,review = self.report()
         #print(str(value) + "    " +  self.fileName + "     " +self.namePatient + "    " + str(self.datePatient))
-        exame = Data.Exam(patient,image,value)
+        exame = Data.Exam(patient,image,values,review)
         self.db.insert(exame)
 
 
@@ -131,10 +131,11 @@ class Sort(object):
             namefile = image.split('.jpg')[0]
             self.listImageSelected.append(namefile)
 
-    def isCatarata(self):
+    def report(self):
 
         # 0 = False     1 = True
-        ret = 0
+        ret = []
+        review = False
         book = xlrd.open_workbook("C:/Users/andre/Desktop/tcc_dados/laudos.xlsx")
         sh = book.sheet_by_index(0)
 
@@ -143,37 +144,43 @@ class Sort(object):
         if find != -1:
             line = find + 1
 
-            retL = sh.cell_value(rowx=line, colx=8)
             retR = sh.cell_value(rowx=line, colx=5)
+            retL = sh.cell_value(rowx=line, colx=8)
 
-            if retL == 0 and retR == 0:
-                ret = sh.cell_value(rowx=line, colx=11)
-                print(self.namePatient)
-                images_path = "C:/Users/andre/Desktop/tcc_dados/FFTCatarata"
-                cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+            ret[0] = retR
+            ret[1] = sh.cell_value(rowx=line, colx=6)
+            ret[2] = sh.cell_value(rowx=line, colx=7)
+            ret[3] = retL
+            ret[4] = sh.cell_value(rowx=line, colx=9)
+            ret[5] = sh.cell_value(rowx=line, colx=10)
+            ret[6] = sh.cell_value(rowx=line, colx=11)
+            ret[7] = sh.cell_value(rowx=line, colx=12)
+            ret[8] = sh.cell_value(rowx=line, colx=13)
 
-            elif self.eyePosition == 'L':
-                ret = retL
+            if (retL == 0 and retR == 0):
+
+                if self.isIncipiente(sh) and self.isLente(sh):
+                    images_path = "C:/Users/andre/Desktop/tcc_dados/IncipienteLente"
+                    if not os.path.isdir(images_path):
+                        os.makedirs(images_path)
+                    cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+                else:
+                    images_path = "C:/Users/andre/Desktop/tcc_dados/Revisao"
+                    if not os.path.isdir(images_path) :
+                        os.makedirs(images_path)
+                    cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+
+                review = True
+
+            else:
                 images_path = "C:/Users/andre/Desktop/tcc_dados/ComCatarata"
                 cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
-            else:
-                ret = retR
-                images_path = "C:/Users/andre/Desktop/tcc_dados/ComCatarata"
-                cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+
         else :
-            ret = 0
             images_path = "C:/Users/andre/Desktop/tcc_dados/SemCatarata"
             cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
-            arquivo = open('nome.txt', 'r')
-            conteudo = arquivo.readlines()
-            conteudo.append(self.namePatient + '\n')
-
-            arquivo = open('nome.txt', 'w')
-            arquivo.writelines(conteudo)
-            arquivo.close()
-
-        return ret
+        return ret,review
 
     def createNameListXML(self,book):
 
@@ -201,3 +208,11 @@ class Sort(object):
                     find = i
                     break
         return find
+
+    def isIncipiente(self,datePatient):
+        ret = False
+        return ret
+
+    def isLente(self):
+        ret = False
+        return ret

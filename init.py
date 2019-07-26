@@ -262,12 +262,12 @@ from datetime import datetime,date
 #     listNameXML.append(str(nameXML).lower())
 #     print(listNameXML[-1])
 
-import pydicom
-
-images_path = "C:/Users/andre/Desktop/tcc_dados/26/1.2.276.0.75.2.1.20.0.3.180731122248561.1174051.27557.dcm"
-
-ds = pydicom.read_file(images_path)
-print(ds)
+# import pydicom
+#
+# images_path = "C:/Users/andre/Desktop/tcc_dados/26/1.2.276.0.75.2.1.20.0.3.180731122248561.1174051.27557.dcm"
+#
+# ds = pydicom.read_file(images_path)
+# print(ds)
 #
 # # try:
 # #     print(ds.Laterality)
@@ -315,3 +315,11 @@ print(ds)
 #     arquivo.writelines(conteudo)
 #     arquivo.close()
 
+# import re
+#
+# nome = input('Qual o seu nome completo? ')
+#
+# if re.search('enzo', nome, re.IGNORECASE):
+#     print("A string tem o nome Enzo")
+# else:
+#     print("A string não tem o nome Enzo")

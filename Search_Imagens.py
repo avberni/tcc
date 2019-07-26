@@ -2,6 +2,7 @@ import os
 import pydicom
 import shutil
 from datetime import timedelta, datetime
+import cv2
 
 
 class ParPatientImage(object):
@@ -19,6 +20,7 @@ class Search(object):
         self.dataStartContents = ""
         self.dataEndContents = ""
         self.listPatImg = []
+        self.format = 'png'
 
     def work_list(self):
 
@@ -54,14 +56,26 @@ class Search(object):
                             eyesectionvalue = 2
 
                         if eyesectionvalue == 0:
+                            print(displayname)
                             self.listPatImg.append(displayname)
+
+                            dcm_save_path = self.dirSaveContents.get() + "/save"
+                            print(dcm_save_path)
+                            image = image.replace('.dcm', '.' + self.format)
+                            if os.path.isdir(dcm_save_path) :
+                                print("pasta DCM ja existe")
+                            else :
+                                os.makedirs(dcm_save_path)
+                            # shutil.copy2(ds.filename, dcm_save_path)
+                            cv2.imwrite(os.path.join(dcm_save_path, image),cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
+
 
                     except pydicom.errors.InvalidDicomError:
                         print("InvalidDicomError")
                     except AttributeError :
                         print("AttributeError")
 
-                self.searchAgain(dcm_load_path)
+                #self.searchAgain(dcm_load_path)
 
                 datestart = datestart + timedelta(days=1)
 
@@ -91,7 +105,10 @@ class Search(object):
                     else:
                         os.makedirs(dcm_save_path)
 
-                    shutil.copy2(ds.filename, dcm_save_path)
+                    image = image.replace('.dcm', '.' + self.format)
+
+                    #shutil.copy2(ds.filename, dcm_save_path)
+                    cv2.imwrite(os.path.join(dcm_save_path, image),cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
 
             except pydicom.errors.InvalidDicomError:
                 print("InvalidDicomError")

@@ -3,9 +3,9 @@
 # import random
 # import IPython.display as display
 # import tensorflow as tf
-import os
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# import os
+#
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # # make it True if you want in PNG format
 PNG = False
