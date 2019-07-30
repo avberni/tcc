@@ -1,14 +1,14 @@
-# import Windows
-#
-# def main(args):
-#     appProc = Windows.MainDialogs()
-#     appProc.execute()
-#     return 0
-#
-# if __name__ == '__main__':
-#     import sys
-#
-#     sys.exit(main(sys.argv))
+import Windows
+
+def main(args):
+    appProc = Windows.MainDialogs()
+    appProc.execute()
+    return 0
+
+if __name__ == '__main__':
+    import sys
+
+    sys.exit(main(sys.argv))
 
 import encodings
 
@@ -252,11 +252,19 @@ from datetime import datetime,date
 #         print(i)
 #
 # import xlrd
-# book = xlrd.open_workbook("C:/Users/andre/Desktop/tcc_dados/laudos.xlsx")
+# book = xlrd.open_workbook("C:/Users/dell/Desktop/tcc_dados/teste.xlsx")
 # sh = book.sheet_by_index(0)
 #
+# for i in range(1, sh.nrows):
+#     aux = sh.cell_value(rowx=i, colx=2)
+#     if aux is "":
+#         print(sh.cell_value(rowx=i, colx=0))
+
+
+
+
 # listNameXML = []
-#
+
 # for i in range(1, sh.nrows) :
 #     nameXML = sh.cell_value(rowx=i, colx=2).split()
 #     listNameXML.append(str(nameXML).lower())

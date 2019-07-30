@@ -35,6 +35,7 @@ class Search(object):
                 dcm_load_path += "/" + datestart.strftime('%Y/%m/%d')
 
                 #lista todas as fotos
+                print(dcm_load_path)
                 images_path = os.listdir(dcm_load_path)
 
                 for n, image in enumerate(images_path):
@@ -60,14 +61,16 @@ class Search(object):
                             self.listPatImg.append(displayname)
 
                             dcm_save_path = self.dirSaveContents.get() + "/save"
-                            print(dcm_save_path)
-                            image = image.replace('.dcm', '.' + self.format)
+                            # print(dcm_save_path)
+                            # image = image.replace('.dcm', '.' + self.format)
+
                             if os.path.isdir(dcm_save_path) :
                                 print("pasta DCM ja existe")
                             else :
                                 os.makedirs(dcm_save_path)
-                            # shutil.copy2(ds.filename, dcm_save_path)
-                            cv2.imwrite(os.path.join(dcm_save_path, image),cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
+
+                            shutil.copy2(ds.filename, dcm_save_path)
+                            # cv2.imwrite(os.path.join(dcm_save_path, image),cv2.cvtColor(ds.pixel_array, cv2.COLOR_RGB2BGR))
 
 
                     except pydicom.errors.InvalidDicomError:

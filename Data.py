@@ -33,16 +33,16 @@ class Exam(BASE):
     def __init__(self,patient,image,var,review):
         self.patient = patient
         self.image = image
-        self.cristalino_od = var[0]
+        self.cristalino_od = bool(var[0])
         self.outros_od = var[1]
         self.alteracoes_estruturas_com_alteracao_od = var[2]
-        self.cristalino_oe = var[3]
+        self.cristalino_oe = bool(var[3])
         self.outros_oe = var[4]
         self.alteracoes_estruturas_com_alteracao_oe = var[5]
-        self.cataract = var[6]
+        self.cataract = bool(var[6])
         self.hipotese_catarata_descricao = var[7]
         self.conduta_detalhamento_conduta = var[8]
-        self.review = review
+        self.review = bool(review)
 
 class Image(BASE):
 

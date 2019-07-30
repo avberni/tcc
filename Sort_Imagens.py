@@ -13,19 +13,17 @@ class Sort(object):
         self.dirSaveContents = ""
         self.format = 'png'
         self.db = Data.DBManipulation()
-        self.listImageSelected = []
-        self.listNameXML = []
         self.namePatient = ""
         self.datePatient = None
         self.eyePosition = ''
-        self.fileName = ""
         self.imagem = None
         self.dicom = None
+        self.listNameXML = []
         self.listDateXML = []
 
     def work_imagens(self):
 
-        self.listSelected()
+        listImageSelected = self.listSelected()
 
         images_path = os.listdir(self.dirLoadContents.get())
 
@@ -37,7 +35,8 @@ class Sort(object):
                 self.dicom = ds
                 namefile = image.split('.dcm')[0]
 
-                if self.listImageSelected.__contains__(namefile):
+
+                if listImageSelected.__contains__(namefile):
 
                     image = image.replace('.dcm', '.' + self.format)
                     self.imagem = image
@@ -47,25 +46,24 @@ class Sort(object):
 
                     if not (os.path.isdir(path)):
                         os.makedirs(path)
+
                     cv2.imwrite(os.path.join(path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
 
         except pydicom.errors.InvalidDicomError:
             print("erro de dicom")
 
-    def insertImage(self,file):
+    def insertImage(self,nameFile):
 
         listDate = list(self.dicom.StudyDate)
         dateStudy = listDate[6] + listDate[7] + "/" + listDate[4] + listDate[5] + "/" + listDate[0] + listDate[1] + listDate[2] + listDate[3]
         dateStudy = datetime.strptime(dateStudy, '%d/%m/%Y').date()
 
-        img = self.db.imageSearch(file)
+        imgListDB = self.db.imageSearch(nameFile)
 
-        if len(img) == 0:
+        if len(imgListDB) == 0:
 
-            self.fileName = file
             anglevalue  = 60
-            laterality = 'L'
 
             try :
                 for anglesection in self.dicom[0x0040, 0x0555] :
@@ -78,14 +76,15 @@ class Sort(object):
             try:
                 laterality = self.dicom.ImageLaterality
             except AttributeError:
+                #Necessário por causa do tipo de DICOM
                 laterality = self.dicom.Laterality
 
 
-            img = Data.Image(file, 0, anglevalue, laterality, dateStudy)
+            img = Data.Image(nameFile, 0, anglevalue, laterality, dateStudy)
             self.eyePosition = laterality
             self.db.insert(img)
             patient = self.insertPatient()
-            self.insertPatIma(patient,img)
+            self.insertExame(patient,img)
         #else:
             #print("Imagem ja exite")
 
@@ -106,37 +105,38 @@ class Sort(object):
         if len(patient) == 0:
             patient = Data.Patient(displayname, patbirthdate)
             self.db.insert(patient)
-
-        if type(patient) is list :
+        else:
             patient = patient[0]
+
+        # if type(patient) is list:
+        #     patient = patient[0]
 
         return patient
 
-    def insertPatIma(self,patient,image):
+    def insertExame(self,patient,image):
 
-        #union = self.db.examSearch(patient,image)
-
-        #if len(union) == 0 :
         values,review = self.report()
-        #print(str(value) + "    " +  self.fileName + "     " +self.namePatient + "    " + str(self.datePatient))
         exame = Data.Exam(patient,image,values,review)
         self.db.insert(exame)
 
 
     def listSelected(self):
 
-        images_path = os.listdir("C:/Users/andre/Desktop/tcc_dados/Aprovados")
+        listImageSelected = []
+        images_path = os.listdir("C:/Users/dell/Desktop/tcc_dados/Descartadas")
 
         for n, image in enumerate(images_path):
             namefile = image.split('.jpg')[0]
-            self.listImageSelected.append(namefile)
+            listImageSelected.append(namefile)
+
+        return listImageSelected
 
     def report(self):
 
         # 0 = False     1 = True
         ret = []
         review = False
-        book = xlrd.open_workbook("C:/Users/andre/Desktop/tcc_dados/laudos.xlsx")
+        book = xlrd.open_workbook("C:/Users/dell/Desktop/tcc_dados/laudos.xlsx")
         sh = book.sheet_by_index(0)
 
         find = self.findPatient(book)
@@ -146,52 +146,67 @@ class Sort(object):
 
             retR = sh.cell_value(rowx=line, colx=5)
             retL = sh.cell_value(rowx=line, colx=8)
+            retH = sh.cell_value(rowx=line, colx=11)
 
-            ret[0] = retR
-            ret[1] = sh.cell_value(rowx=line, colx=6)
-            ret[2] = sh.cell_value(rowx=line, colx=7)
-            ret[3] = retL
-            ret[4] = sh.cell_value(rowx=line, colx=9)
-            ret[5] = sh.cell_value(rowx=line, colx=10)
-            ret[6] = sh.cell_value(rowx=line, colx=11)
-            ret[7] = sh.cell_value(rowx=line, colx=12)
-            ret[8] = sh.cell_value(rowx=line, colx=13)
+            if sh.cell_value(rowx=line, colx=5) == "":
+                print(sh.cell_value(rowx=line, colx=2))
+                retR = False
 
-            if (retL == 0 and retR == 0):
+            if sh.cell_value(rowx=line, colx=8) == "":
+                print(sh.cell_value(rowx=line, colx=2))
+                retR = False
 
-                if self.isIncipiente(sh) and self.isLente(sh):
-                    images_path = "C:/Users/andre/Desktop/tcc_dados/IncipienteLente"
-                    if not os.path.isdir(images_path):
-                        os.makedirs(images_path)
-                    cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
-                else:
-                    images_path = "C:/Users/andre/Desktop/tcc_dados/Revisao"
-                    if not os.path.isdir(images_path) :
-                        os.makedirs(images_path)
-                    cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+            ret.append(bool(retR))
+            ret.append(sh.cell_value(rowx=line, colx=6))
+            ret.append(sh.cell_value(rowx=line, colx=7))
+            ret.append(bool(retL))
+            ret.append(sh.cell_value(rowx=line, colx=9))
+            ret.append(sh.cell_value(rowx=line, colx=10))
+            ret.append(bool(retH))
+            ret.append(sh.cell_value(rowx=line, colx=12))
+            ret.append(sh.cell_value(rowx=line, colx=13))
+
+            if (bool(retL) is False and bool(retR) is False and bool(retH) is True) or ((bool(retL) is True or bool(retR) is True) and bool(retH) is False):
+
+                # if self.isIncipiente(sh) and self.isLente(sh):
+                #     images_path = "C:/Users/dell/Desktop/tcc_dados/IncipienteLente"
+                #     if not os.path.isdir(images_path):
+                #         os.makedirs(images_path)
+                #     cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+                # else:
+                images_path = "C:/Users/dell/Desktop/tcc_dados/Revisao"
+
+                if not os.path.isdir(images_path) :
+                    os.makedirs(images_path)
+                cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
                 review = True
 
-            else:
-                images_path = "C:/Users/andre/Desktop/tcc_dados/ComCatarata"
+            elif (bool(retL) is True or bool(retR) is True) and (bool(retH) is True):
+                #deposi exclui o tipo
+                images_path = "C:/Users/dell/Desktop/tcc_dados/ComCatarata"
+                if not os.path.isdir(images_path):
+                    os.makedirs(images_path)
+
                 cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+            else:
+                images_path = "C:/Users/dell/Desktop/tcc_dados/SemCatarata"
+                if not os.path.isdir(images_path):
+                    os.makedirs(images_path)
+
+                cv2.imwrite(os.path.join(images_path, self.imagem),cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
         else :
-            images_path = "C:/Users/andre/Desktop/tcc_dados/SemCatarata"
+
+            for i in range(0,9):
+                ret.append(0)
+
+            images_path = "C:/Users/dell/Desktop/tcc_dados/SemBanco"
+            if not os.path.isdir(images_path):
+                os.makedirs(images_path)
             cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
         return ret,review
-
-    def createNameListXML(self,book):
-
-        sh = book.sheet_by_index(0)
-
-        for i in range(1,sh.nrows):
-            nameXML = sh.cell_value(rowx=i, colx=2).split()
-            self.listNameXML.append(str(nameXML).lower())
-            py_date = xlrd.xldate.xldate_as_datetime(sh.cell_value(rowx=i, colx=4),book.datemode).date()
-            self.listDateXML.append(py_date)
-
 
     def findPatient(self,book):
 
@@ -204,10 +219,21 @@ class Sort(object):
 
         for i, item in enumerate(self.listNameXML):
             if item.__contains__(pat[0]) and item.__contains__(pat[1]):
+                #print(self.listDateXML[i] + " ==  " + self.datePatient)
                 if self.listDateXML[i] == self.datePatient:
                     find = i
                     break
         return find
+
+    def createNameListXML(self, book):
+
+        sh = book.sheet_by_index(0)
+
+        for i in range(1, sh.nrows):
+            nameXML = sh.cell_value(rowx=i, colx=2).split()
+            self.listNameXML.append(str(nameXML).lower())
+            py_date = xlrd.xldate.xldate_as_datetime(sh.cell_value(rowx=i, colx=4), book.datemode).date()
+            self.listDateXML.append(py_date)
 
     def isIncipiente(self,datePatient):
         ret = False
