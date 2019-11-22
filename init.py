@@ -133,7 +133,7 @@ import encodings
 # cv2.destroyAllWindows()
 
 #import Data
-from datetime import datetime,date
+#from datetime import datetime,date
 
 #db = Data.DBManipulation()
 
@@ -272,11 +272,11 @@ from datetime import datetime,date
 
 # import pydicom
 #
-# images_path = "C:/Users/andre/Desktop/tcc_dados/26/1.2.276.0.75.2.1.20.0.3.180731122248561.1174051.27557.dcm"
+# images_path = "C:/Users/dell/Desktop/new/1.2.276.0.75.2.1.20.0.3.190703150212054.1174051.20607.dcm"
 #
 # ds = pydicom.read_file(images_path)
 # print(ds)
-#
+
 # # try:
 # #     print(ds.Laterality)
 # # except Exception as e:

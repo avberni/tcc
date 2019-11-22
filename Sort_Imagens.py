@@ -3,15 +3,17 @@ import os
 import cv2
 import Data
 import xlrd
+from PIL import Image, ImageFile
 from datetime import datetime
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class Sort(object):
 
     def __init__(self):
         self.dirLoadContents = ""
         self.dirSaveContents = ""
-        self.format = 'png'
+        self.format = 'jpg'
         self.db = Data.DBManipulation()
         self.namePatient = ""
         self.datePatient = None
@@ -39,15 +41,17 @@ class Sort(object):
                 if listImageSelected.__contains__(namefile):
 
                     image = image.replace('.dcm', '.' + self.format)
+
+
                     self.imagem = image
                     self.insertImage(namefile)
 
-                    path = self.dirSaveContents.get() + '/' + self.format + str(0)
-
-                    if not (os.path.isdir(path)):
-                        os.makedirs(path)
-
-                    cv2.imwrite(os.path.join(path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+                # path = self.dirSaveContents.get() + '/' + self.format + str(0)
+                #
+                # if not (os.path.isdir(path)):
+                #     os.makedirs(path)
+                #
+                # cv2.imwrite(os.path.join(path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
 
 
         except pydicom.errors.InvalidDicomError:
@@ -123,11 +127,20 @@ class Sort(object):
     def listSelected(self):
 
         listImageSelected = []
-        images_path = os.listdir("C:/Users/dell/Desktop/tcc_dados/Descartadas")
+        images_path = os.listdir("C:/Users/dell/Desktop/tcc_dados/erros/ComCatarata")
 
         for n, image in enumerate(images_path):
-            namefile = image.split('.jpg')[0]
+            namefile = image.split('.png')[0]
             listImageSelected.append(namefile)
+
+            # arquivo = open('nome.txt', 'r') # Abra o arquivo (leitura)
+            # conteudo = arquivo.readlines()
+            # conteudo.append( image + '\n')   # insira seu conteúdo
+            #
+            # arquivo = open('nome.txt', 'w') # Abre novamente o arquivo (escrita)
+            # arquivo.writelines(conteudo)    # escreva o conteúdo criado anteriormente nele.
+            #
+            # arquivo.close()
 
         return listImageSelected
 
@@ -204,7 +217,11 @@ class Sort(object):
             images_path = "C:/Users/dell/Desktop/tcc_dados/SemBanco"
             if not os.path.isdir(images_path):
                 os.makedirs(images_path)
-            cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+
+            try:
+                cv2.imwrite(os.path.join(images_path, self.imagem), cv2.cvtColor(self.dicom.pixel_array, cv2.COLOR_RGB2BGR))
+            except Exception:
+                print(self.imagem)
 
         return ret,review
 
